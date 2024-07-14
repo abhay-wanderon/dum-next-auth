@@ -1,8 +1,13 @@
-import { withAuth } from "next-auth/middleware"
-import { useSession } from "next-auth/react"
+import { Button } from "@/components/ui/button"
+import { signOut, useSession } from "next-auth/react"
 
 function ProtectedPage() {
+
     const { data: session } = useSession()
+
+    const handleLogout = async () => {
+        await signOut({ redirect: false, callbackUrl: "/" })
+    }
 
     if (!session) {
         return <p>Access Denied</p>
@@ -11,7 +16,8 @@ function ProtectedPage() {
     return (
         <div>
             <h1>Protected Page</h1>
-            <p>Welcome {session?.user?.name}</p>
+            <Button variant={"destructive"} onClick={handleLogout}>Logout</Button>
+            <p>Welcome {JSON.stringify(session)}</p>
         </div>
     )
 }
